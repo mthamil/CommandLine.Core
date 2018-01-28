@@ -47,8 +47,8 @@ nuget:
 #---------------------------------#
 
 artifacts:
-  - path: '**\$(APPVEYOR_PROJECT_NAME)\bin\**\*.nupkg'
-  - path: '**\$(APPVEYOR_PROJECT_NAME)\bin\**\*.symbols.nupkg'
+  - path: '**\$(APPVEYOR_PROJECT_NAME).*\bin\**\*.nupkg'
+  - path: '**\$(APPVEYOR_PROJECT_NAME).*\bin\**\*.symbols.nupkg'
 
 
 #---------------------------------#
