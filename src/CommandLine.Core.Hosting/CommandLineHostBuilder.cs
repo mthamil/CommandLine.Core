@@ -11,6 +11,7 @@ namespace CommandLine.Core.Hosting
         private readonly ServiceCollection _services;
         private readonly IConfigurationRoot _config;
         private readonly string[] _args;
+        private bool _built;
 
         public CommandLineHostBuilder(string[] args)
         {
@@ -35,6 +36,9 @@ namespace CommandLine.Core.Hosting
 
         public ICommandLineHost Build()
         {
+            if (_built)
+                throw new InvalidOperationException("Host has already been built.");
+
             foreach (var serviceConfig in _serviceConfigurations)
                 serviceConfig(_services);
 
@@ -43,6 +47,7 @@ namespace CommandLine.Core.Hosting
             var appServices = Copy(_services);
             var hostingServiceProvider = _services.BuildServiceProvider();
 
+            _built = true;
             return new CommandLineHost(
                 appServices,
                 hostingServiceProvider,

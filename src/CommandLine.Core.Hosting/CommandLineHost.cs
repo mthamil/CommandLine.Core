@@ -40,7 +40,7 @@ namespace CommandLine.Core.Hosting
 
             _startup.Value.Configure(appBuilder);
 
-            var app = _appServiceProvider.Value.GetRequiredService<ApplicationDelegate>();
+            var app = appBuilder.Build();
             return app(_args);
         }
 

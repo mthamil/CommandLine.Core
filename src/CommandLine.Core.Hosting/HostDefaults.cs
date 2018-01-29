@@ -2,7 +2,8 @@
 {
     public static class HostDefaults
     {
-        public static string WorkingDirectoryKey { get; } = "WorkingDirectory";
-        public static string AllowUnknownArgumentsKey { get; } = "AllowUnknownArguments";
+        public static string ApplicationNameKey = "ApplicationName";
+        public static string WorkingDirectoryKey = "WorkingDirectory";
+        public static string AllowUnknownArgumentsKey = "AllowUnknownArguments";
     }
 }
