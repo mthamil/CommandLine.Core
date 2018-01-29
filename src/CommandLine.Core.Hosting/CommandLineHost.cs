@@ -22,7 +22,7 @@ namespace CommandLine.Core.Hosting
             _appServices = appServices ?? throw new ArgumentNullException(nameof(appServices));
             _hostingServiceProvider = hostingServiceProvider ?? throw new ArgumentNullException(nameof(hostingServiceProvider));
             _config = config ?? throw new ArgumentNullException(nameof(config));
-            _args = args;
+            _args = args ?? throw new ArgumentNullException(nameof(args));
 
             _startup = new Lazy<IStartup>(() => _hostingServiceProvider.GetRequiredService<IStartup>());
             _appServiceProvider = new Lazy<IServiceProvider>(() =>

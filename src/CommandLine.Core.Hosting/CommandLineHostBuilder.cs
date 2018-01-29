@@ -30,7 +30,7 @@ namespace CommandLine.Core.Hosting
 
         public ICommandLineHostBuilder ConfigureServices(Action<IServiceCollection> configureServices)
         {
-            _serviceConfigurations.Add(configureServices);
+            _serviceConfigurations.Add(configureServices ?? throw new ArgumentNullException(nameof(configureServices)));
             return this;
         }
 

@@ -8,6 +8,9 @@ namespace CommandLine.Core.Hosting
     {
         public static ICommandLineHostBuilder Configure(this ICommandLineHostBuilder builder, Action<IApplicationBuilder> configureApp)
         {
+            if (configureApp == null)
+                throw new ArgumentNullException(nameof(configureApp));
+
             return builder.UseSetting(HostDefaults.ApplicationNameKey, configureApp.GetMethodInfo().DeclaringType.Assembly.GetName().Name)
                           .ConfigureServices(services => services.AddSingleton<IStartup>(new DelegateStartup(configureApp)));
         }

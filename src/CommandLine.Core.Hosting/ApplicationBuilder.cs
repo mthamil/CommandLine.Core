@@ -16,7 +16,7 @@ namespace CommandLine.Core.Hosting
 
         public IApplicationBuilder Use(ApplicationDelegate app)
         {
-            _app = app;
+            _app = app ?? throw new ArgumentNullException(nameof(app));
             return this;
         }
 
