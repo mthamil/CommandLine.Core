@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Product>CommandLine.Core.Hosting.CommandLineUtils</Product>
-    <Description>Provides integration with McMaster.Extensions.CommandLineUtils for CommandLine.Core.</Description>
+    <Product>CommandLine.Core.Hosting.Abstractions</Product>
+    <Description>Hosting and startup abstractions for command line applications.</Description>
     <Authors>Matt Hamilton</Authors>
     <Copyright>Copyright 2018 Matt Hamilton</Copyright>
     <PackageProjectUrl>https://github.com/mthamil/CommandLine.Core</PackageProjectUrl>
@@ -19,14 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\CommandLine.Core.Hosting.Abstractions\CommandLine.Core.Hosting.Abstractions.csproj" />
-    <ProjectReference Include="..\CommandLine.Core.Hosting\CommandLine.Core.Hosting.csproj" />
   </ItemGroup>
 
 </Project>

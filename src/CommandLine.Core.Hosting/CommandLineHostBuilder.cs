@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CommandLine.Core.Hosting.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,17 +9,22 @@ namespace CommandLine.Core.Hosting
     class CommandLineHostBuilder : ICommandLineHostBuilder
     {
         private readonly ICollection<Action<IServiceCollection>> _serviceConfigurations = new List<Action<IServiceCollection>>();
-        private readonly ServiceCollection _services;
         private readonly IConfigurationRoot _config;
+        private readonly HostingEnvironment _hostingEnvironment;
         private readonly string[] _args;
         private bool _built;
 
         public CommandLineHostBuilder(string[] args)
         {
-            _services = new ServiceCollection();
+            _hostingEnvironment = new HostingEnvironment();
             _config = new ConfigurationBuilder()
                 .AddEnvironmentVariables()
                 .Build();
+
+            // Fall back to the ASPNETCORE environment name.
+            if (String.IsNullOrEmpty(_config[HostDefaults.EnvironmentNameKey]))
+                UseSetting(HostDefaults.EnvironmentNameKey, Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
+
             _args = args;
         }
 
@@ -39,13 +45,17 @@ namespace CommandLine.Core.Hosting
             if (_built)
                 throw new InvalidOperationException("Host has already been built.");
 
+            _hostingEnvironment.Initialize(_config);
+
+            var services = new ServiceCollection()
+                .AddSingleton<IConfiguration>(_config)
+                .AddSingleton<IHostingEnvironment>(_hostingEnvironment);
+
             foreach (var serviceConfig in _serviceConfigurations)
-                serviceConfig(_services);
+                serviceConfig(services);
 
-            _services.AddSingleton<IConfiguration>(_config);
-
-            var appServices = Copy(_services);
-            var hostingServiceProvider = _services.BuildServiceProvider();
+            var appServices = CopyServices(services);
+            var hostingServiceProvider = services.BuildServiceProvider();
 
             _built = true;
             return new CommandLineHost(
@@ -55,7 +65,7 @@ namespace CommandLine.Core.Hosting
                 _args);
         }
 
-        private static IServiceCollection Copy(IServiceCollection services)
+        private static IServiceCollection CopyServices(IServiceCollection services)
         {
             var copy = new ServiceCollection() as IServiceCollection;
             foreach (var service in services)

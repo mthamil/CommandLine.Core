@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace CommandLine.Core.Hosting
+namespace CommandLine.Core.Hosting.Abstractions
 {
     public interface IStartup
     {

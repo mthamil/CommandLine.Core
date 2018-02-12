@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace CommandLine.Core.Hosting
+namespace CommandLine.Core.Hosting.Abstractions
 {
     public interface ICommandLineHost
     {

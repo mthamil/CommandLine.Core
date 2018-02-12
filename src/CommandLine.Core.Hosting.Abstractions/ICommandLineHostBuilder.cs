@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace CommandLine.Core.Hosting
+namespace CommandLine.Core.Hosting.Abstractions
 {
     public interface ICommandLineHostBuilder
     {
