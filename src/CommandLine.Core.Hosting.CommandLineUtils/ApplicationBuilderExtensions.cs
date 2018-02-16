@@ -19,7 +19,11 @@ namespace CommandLine.Core.Hosting.CommandLineUtils
             using (var rootScope = app.ApplicationServices.CreateScope())
             {
                 var commands = rootScope.ServiceProvider.GetServices<CommandLineApplication>();
-                rootApp.Commands.AddRange(commands);
+                foreach (var command in commands)
+                {
+                    rootApp.Commands.Add(command);
+                    command.Parent = rootApp;
+                }
             }
 
             configureApp?.Invoke(rootApp);
