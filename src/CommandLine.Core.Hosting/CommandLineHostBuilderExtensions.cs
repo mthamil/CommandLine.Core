@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Reflection;
 
 namespace CommandLine.Core.Hosting
 {
@@ -13,7 +12,7 @@ namespace CommandLine.Core.Hosting
             if (configureApp == null)
                 throw new ArgumentNullException(nameof(configureApp));
 
-            return builder.UseSetting(HostDefaults.ApplicationNameKey, configureApp.GetMethodInfo().DeclaringType.Assembly.GetName().Name)
+            return builder.UseSetting(HostDefaults.ApplicationNameKey, configureApp.Method.DeclaringType.Assembly.GetName().Name)
                           .ConfigureServices(services => services.AddSingleton<IStartup>(new DelegateStartup(configureApp)));
         }
 
