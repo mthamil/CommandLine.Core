@@ -18,7 +18,7 @@ namespace CommandLine.Core.Hosting
         {
             _hostingEnvironment = new HostingEnvironment();
             _config = new ConfigurationBuilder()
-                .AddEnvironmentVariables()
+                .AddEnvironmentVariables("COMMANDLINECORE_")
                 .Build();
 
             // Fall back to the ASPNETCORE environment name.
