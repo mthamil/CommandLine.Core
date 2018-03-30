@@ -1,4 +1,5 @@
 ﻿using CommandLine.Core.Hosting.Abstractions;
+using CommandLine.Core.Hosting.CommandLineUtils.Options;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -23,6 +24,12 @@ namespace CommandLine.Core.Hosting.CommandLineUtils
                 {
                     rootApp.Commands.Add(command);
                     command.Parent = rootApp;
+                }
+
+                var sharedOptions = app.ApplicationServices.GetService<ISharedOptions>();
+                if (sharedOptions != null)
+                {
+                    rootApp.Options.AddRange(sharedOptions);
                 }
             }
 
