@@ -23,9 +23,9 @@ namespace CommandLine.Core.Hosting.CommandLineUtils.Options
             return this;
         }
 
-        public ISharedOptionsBuilder Option(string template, string description, CommandOptionType optionType)
+        public ISharedOptionsBuilder Option(string template, string description, CommandOptionType type)
         {
-            var option = new CommandOption(template, optionType) { Inherited = true };
+            var option = new CommandOption(template, type) { Inherited = true };
             option.Description = description ?? _descriptions?[CreateResourceKey(option.LongName)];
             _options.Add(option);
             return this;

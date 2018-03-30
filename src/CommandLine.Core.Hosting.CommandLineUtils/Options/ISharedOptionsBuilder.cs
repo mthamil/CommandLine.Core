@@ -8,6 +8,6 @@ namespace CommandLine.Core.Hosting.CommandLineUtils.Options
     {
         ISharedOptionsBuilder WithDescriptionsFrom(Func<IServiceProvider, IReadOnlyDictionary<string, string>> descriptionProvider);
 
-        ISharedOptionsBuilder Option(string template, string description = null, CommandOptionType optionType = CommandOptionType.SingleValue);
+        ISharedOptionsBuilder Option(string template, string description = null, CommandOptionType type = CommandOptionType.SingleValue);
     }
 }
