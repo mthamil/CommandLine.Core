@@ -11,37 +11,29 @@ namespace CommandLine.Core.Hosting.CommandLineUtils
 {
     public static class CommandUtilsHostBuilderExtensions
     {
-        public static ICommandLineHostBuilder UseCommandLineUtils(this ICommandLineHostBuilder builder)
-        {
-            return builder.UseSetting(HostDefaults.WorkingDirectoryKey, Directory.GetCurrentDirectory())
-                          .UseSetting(HostDefaults.AllowUnknownArgumentsKey, Boolean.FalseString)
-                          .ConfigureServices(services => services.AddRootApplication()
-                                                                 .AddApplicationDelegate());
-        }
+        public static ICommandLineHostBuilder UseCommandLineUtils(this ICommandLineHostBuilder builder) =>
+            builder.UseSetting(HostDefaults.WorkingDirectoryKey, Directory.GetCurrentDirectory())
+                   .UseSetting(HostDefaults.AllowUnknownArgumentsKey, Boolean.FalseString)
+                   .ConfigureServices(services => services.AddRootApplication()
+                                                          .AddApplicationDelegate());
 
-        private static IServiceCollection AddRootApplication(this IServiceCollection services)
-        {
-            return services.AddSingleton(provider =>
+        private static IServiceCollection AddRootApplication(this IServiceCollection services) =>
+            services.AddSingleton(provider =>
             {
                 var config = provider.GetService<IConfiguration>();
 
-                var app = new RootCommandLineApplication(
-                     provider.GetService<IHelpTextGenerator>() ?? DefaultHelpTextGenerator.Singleton,
-                     provider.GetService<IConsole>() ?? PhysicalConsole.Singleton,
-                     config[HostDefaults.WorkingDirectoryKey],
-                     !Boolean.Parse(config[HostDefaults.AllowUnknownArgumentsKey]));
-
-                return app;
+                return new RootCommandLineApplication(
+                    provider.GetService<IHelpTextGenerator>() ?? DefaultHelpTextGenerator.Singleton,
+                    provider.GetService<IConsole>() ?? PhysicalConsole.Singleton,
+                    config[HostDefaults.WorkingDirectoryKey],
+                    !Boolean.Parse(config[HostDefaults.AllowUnknownArgumentsKey]));
             });
-        }
 
-        private static IServiceCollection AddApplicationDelegate(this IServiceCollection services)
-        {
-            return services.AddSingleton(provider =>
+        private static IServiceCollection AddApplicationDelegate(this IServiceCollection services) =>
+            services.AddSingleton(provider =>
             {
                 var app = provider.GetRequiredService<RootCommandLineApplication>();
                 return new ApplicationDelegate(args => Task.FromResult(app.Execute(args)));
             });
-        }
     }
 }
