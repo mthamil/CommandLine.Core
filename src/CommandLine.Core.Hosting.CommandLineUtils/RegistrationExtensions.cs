@@ -22,23 +22,11 @@ namespace CommandLine.Core.Hosting.CommandLineUtils
         {
             private readonly ICollection<Action<IServiceCollection>> _commandRegistrations = new List<Action<IServiceCollection>>();
 
-            public ICommandServiceCollection SingletonBase<TCommand>() where TCommand : CommandLineApplication =>
-                Add(s => s.AddSingleton<CommandLineApplication, TCommand>());
-
-            public ICommandServiceCollection ScopedBase<TCommand>() where TCommand : CommandLineApplication =>
+            public ICommandServiceCollection Base<TCommand>() where TCommand : CommandLineApplication =>
                 Add(s => s.AddScoped<CommandLineApplication, TCommand>());
 
-            public ICommandServiceCollection TransientBase<TCommand>() where TCommand : CommandLineApplication =>
-                Add(s => s.AddTransient<CommandLineApplication, TCommand>());
-
-            public ICommandServiceCollection SingletonChild<TCommand>() where TCommand : CommandLineApplication =>
-                Add(s => s.AddSingleton<TCommand>());
-
-            public ICommandServiceCollection ScopedChild<TCommand>() where TCommand : CommandLineApplication =>
+            public ICommandServiceCollection Child<TCommand>() where TCommand : CommandLineApplication =>
                 Add(s => s.AddScoped<TCommand>());
-
-            public ICommandServiceCollection TransientChild<TCommand>() where TCommand : CommandLineApplication =>
-                Add(s => s.AddTransient<TCommand>());
 
             public void Apply(IServiceCollection services)
             {
@@ -59,31 +47,11 @@ namespace CommandLine.Core.Hosting.CommandLineUtils
         /// <summary>
         /// Adds a root level command.
         /// </summary>
-        ICommandServiceCollection SingletonBase<TCommand>() where TCommand : CommandLineApplication;
-
-        /// <summary>
-        /// Adds a root level command.
-        /// </summary>
-        ICommandServiceCollection ScopedBase<TCommand>() where TCommand : CommandLineApplication;
-
-        /// <summary>
-        /// Adds a root level command.
-        /// </summary>
-        ICommandServiceCollection TransientBase<TCommand>() where TCommand : CommandLineApplication;
+        ICommandServiceCollection Base<TCommand>() where TCommand : CommandLineApplication;
 
         /// <summary>
         /// Adds a child command.
         /// </summary>
-        ICommandServiceCollection SingletonChild<TCommand>() where TCommand : CommandLineApplication;
-
-        /// <summary>
-        /// Adds a child command.
-        /// </summary>
-        ICommandServiceCollection ScopedChild<TCommand>() where TCommand : CommandLineApplication;
-
-        /// <summary>
-        /// Adds a child command.
-        /// </summary>
-        ICommandServiceCollection TransientChild<TCommand>() where TCommand : CommandLineApplication;
+        ICommandServiceCollection Child<TCommand>() where TCommand : CommandLineApplication;
     }
 }
