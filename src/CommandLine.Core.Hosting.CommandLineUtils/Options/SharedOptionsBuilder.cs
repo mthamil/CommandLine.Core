@@ -2,36 +2,43 @@
 using McMaster.Extensions.CommandLineUtils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CommandLine.Core.Hosting.CommandLineUtils.Options
 {
     class SharedOptionsBuilder : ISharedOptionsBuilder
     {
-        private readonly List<CommandOption> _options = new List<CommandOption>();
         private readonly IServiceProvider _services;
 
-        private IReadOnlyDictionary<string, string> _descriptions;
+        private IList<Func<IReadOnlyDictionary<string, string>, CommandOption>> _options = new List<Func<IReadOnlyDictionary<string, string>, CommandOption>>();
+        private Lazy<IReadOnlyDictionary<string, string>> _descriptions;
 
         public SharedOptionsBuilder(IServiceProvider services)
         {
-            _services = services;
+            _services = services ?? throw new ArgumentNullException(nameof(services));
         }
 
         public ISharedOptionsBuilder WithDescriptionsFrom(Func<IServiceProvider, IReadOnlyDictionary<string, string>> descriptionProvider)
         {
-            _descriptions = descriptionProvider(_services);
+            _descriptions = new Lazy<IReadOnlyDictionary<string, string>>(() => descriptionProvider(_services));
             return this;
         }
 
         public ISharedOptionsBuilder Option(string template, string description, CommandOptionType type)
         {
-            var option = new CommandOption(template, type) { Inherited = true };
-            option.Description = description ?? _descriptions?[CreateResourceKey(option.LongName)];
-            _options.Add(option);
+            _options.Add(descriptions =>
+            {
+                var option = new CommandOption(template, type) { Inherited = true };
+                option.Description = description ?? descriptions?[CreateResourceKey(option.LongName)];
+                return option;
+            });
+            
             return this;
         }
 
-        public ISharedOptions Build() => new SharedOptions(_options);
+        public ISharedOptions Build() => new SharedOptions(_options
+                                            .Select(f => f(_descriptions.Value))
+                                            .ToList());
 
         private static string CreateResourceKey(string longName) => longName.ToPascalCase();
     }
