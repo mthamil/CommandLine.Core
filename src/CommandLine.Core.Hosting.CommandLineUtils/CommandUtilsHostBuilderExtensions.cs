@@ -1,4 +1,5 @@
 ﻿using CommandLine.Core.Hosting.Abstractions;
+using CommandLine.Core.Hosting.CommandLineUtils.Options;
 using McMaster.Extensions.CommandLineUtils;
 using McMaster.Extensions.CommandLineUtils.HelpText;
 using Microsoft.Extensions.Configuration;
@@ -11,6 +12,11 @@ namespace CommandLine.Core.Hosting.CommandLineUtils
 {
     public static class CommandUtilsHostBuilderExtensions
     {
+        /// <summary>
+        /// Enables integration with McMaster.Extensions.CommandLineUtils.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
         public static ICommandLineHostBuilder UseCommandLineUtils(this ICommandLineHostBuilder builder) =>
             builder.UseSetting(HostDefaults.WorkingDirectoryKey, Directory.GetCurrentDirectory())
                    .UseSetting(HostDefaults.AllowUnknownArgumentsKey, Boolean.FalseString)
@@ -22,11 +28,28 @@ namespace CommandLine.Core.Hosting.CommandLineUtils
             {
                 var config = provider.GetService<IConfiguration>();
 
-                return new RootCommandLineApplication(
+                var rootApp = new RootCommandLineApplication(
                     provider.GetService<IHelpTextGenerator>() ?? DefaultHelpTextGenerator.Singleton,
                     provider.GetService<IConsole>() ?? PhysicalConsole.Singleton,
                     config[HostDefaults.WorkingDirectoryKey],
                     !Boolean.Parse(config[HostDefaults.AllowUnknownArgumentsKey]));
+
+                using (var rootScope = provider.CreateScope())
+                {
+                    foreach (var command in rootScope.ServiceProvider.GetServices<CommandLineApplication>())
+                    {
+                        rootApp.Commands.Add(command);
+                        command.Parent = rootApp;
+                    }
+
+                    var sharedOptions = rootScope.ServiceProvider.GetService<ISharedOptions>();
+                    if (sharedOptions != null)
+                    {
+                        rootApp.Options.AddRange(sharedOptions);
+                    }
+                }
+
+                return rootApp;
             });
 
         private static IServiceCollection AddApplicationDelegate(this IServiceCollection services) =>

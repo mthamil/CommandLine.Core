@@ -5,6 +5,9 @@ namespace CommandLine.Core.Hosting.CommandLineUtils.Options
 {
     public static class SharedOptionsRegistrationExtensions
     {
+        /// <summary>
+        /// Registers common application options with the specified <see cref="IServiceCollection"/>.
+        /// </summary>
         public static IServiceCollection AddCommonOptions(this IServiceCollection services, Action<ISharedOptionsBuilder> optionsBuilder) =>
             services.AddSingleton(provider =>
             {

@@ -5,11 +5,13 @@ using System.Collections.Generic;
 
 namespace CommandLine.Core.Hosting.CommandLineUtils
 {
-    public static class RegistrationExtensions
+    public static class CommandRegistrationExtensions
     {
         /// <summary>
-        /// Provides service registration for commands.
+        /// Defines and registers commands with the specified <see cref="IServiceCollection"/>.
         /// </summary>
+        /// <param name="services">The service collection to add commands to.</param>
+        /// <param name="configureCommands">A function that enables defining commands.</param>
         public static IServiceCollection AddCommands(this IServiceCollection services, Action<ICommandServiceCollection> configureCommands)
         {
             var builder = new CommandServiceCollection();
@@ -50,7 +52,7 @@ namespace CommandLine.Core.Hosting.CommandLineUtils
         ICommandServiceCollection Base<TCommand>() where TCommand : CommandLineApplication;
 
         /// <summary>
-        /// Adds a child command.
+        /// Adds a child command. A child command is any command that is not at the root of an application.
         /// </summary>
         ICommandServiceCollection Child<TCommand>() where TCommand : CommandLineApplication;
     }
