@@ -20,8 +20,13 @@ namespace CommandLine.Core.Hosting.CommandLineUtils
         public static ICommandLineHostBuilder UseCommandLineUtils(this ICommandLineHostBuilder builder) =>
             builder.UseSetting(HostDefaults.WorkingDirectoryKey, Directory.GetCurrentDirectory())
                    .UseSetting(HostDefaults.AllowUnknownArgumentsKey, Boolean.FalseString)
-                   .ConfigureServices(services => services.AddRootApplication()
+                   .ConfigureServices(services => services.AddCommonServices()
+                                                          .AddRootApplication()
                                                           .AddApplicationDelegate());
+
+        private static IServiceCollection AddCommonServices(this IServiceCollection services) =>
+            services.AddSingleton(PhysicalConsole.Singleton)
+                    .AddSingleton<IHelpTextGenerator>(DefaultHelpTextGenerator.Singleton);
 
         private static IServiceCollection AddRootApplication(this IServiceCollection services) =>
             services.AddSingleton(provider =>
@@ -29,8 +34,8 @@ namespace CommandLine.Core.Hosting.CommandLineUtils
                 var config = provider.GetService<IConfiguration>();
 
                 var rootApp = new RootCommandLineApplication(
-                    provider.GetService<IHelpTextGenerator>() ?? DefaultHelpTextGenerator.Singleton,
-                    provider.GetService<IConsole>() ?? PhysicalConsole.Singleton,
+                    provider.GetService<IHelpTextGenerator>(),
+                    provider.GetService<IConsole>(),
                     config[HostDefaults.WorkingDirectoryKey],
                     !Boolean.Parse(config[HostDefaults.AllowUnknownArgumentsKey]));
 
@@ -58,5 +63,6 @@ namespace CommandLine.Core.Hosting.CommandLineUtils
                 var app = provider.GetRequiredService<RootCommandLineApplication>();
                 return new ApplicationDelegate(args => Task.FromResult(app.Execute(args)));
             });
+
     }
 }
