@@ -1,7 +1,7 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
 using McMaster.Extensions.CommandLineUtils.HelpText;
 
-namespace CommandLine.Core.Hosting.CommandLineUtils
+namespace CommandLine.Core.CommandLineUtils
 {
     public class RootCommandLineApplication : CommandLineApplication
     {

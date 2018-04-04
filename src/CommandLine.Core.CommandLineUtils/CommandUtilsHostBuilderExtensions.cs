@@ -1,5 +1,6 @@
-﻿using CommandLine.Core.Hosting.Abstractions;
-using CommandLine.Core.Hosting.CommandLineUtils.Options;
+﻿using CommandLine.Core.CommandLineUtils.Options;
+using CommandLine.Core.Hosting;
+using CommandLine.Core.Hosting.Abstractions;
 using McMaster.Extensions.CommandLineUtils;
 using McMaster.Extensions.CommandLineUtils.HelpText;
 using Microsoft.Extensions.Configuration;
@@ -8,7 +9,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace CommandLine.Core.Hosting.CommandLineUtils
+namespace CommandLine.Core.CommandLineUtils
 {
     public static class CommandUtilsHostBuilderExtensions
     {

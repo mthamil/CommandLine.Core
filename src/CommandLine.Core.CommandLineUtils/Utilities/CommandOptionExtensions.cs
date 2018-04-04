@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace CommandLine.Core.Hosting.CommandLineUtils.Utilities
+namespace CommandLine.Core.CommandLineUtils.Utilities
 {
     public static class CommandOptionExtensions
     {

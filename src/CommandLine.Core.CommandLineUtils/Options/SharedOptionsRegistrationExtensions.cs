@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace CommandLine.Core.Hosting.CommandLineUtils.Options
+namespace CommandLine.Core.CommandLineUtils.Options
 {
     public static class SharedOptionsRegistrationExtensions
     {

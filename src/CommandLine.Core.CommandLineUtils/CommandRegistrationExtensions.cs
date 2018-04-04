@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 
-namespace CommandLine.Core.Hosting.CommandLineUtils
+namespace CommandLine.Core.CommandLineUtils
 {
     public static class CommandRegistrationExtensions
     {

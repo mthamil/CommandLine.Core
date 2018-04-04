@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace CommandLine.Core.Hosting.CommandLineUtils.Options
+namespace CommandLine.Core.CommandLineUtils.Options
 {
     /// <summary>
     /// Provides shared command option configuration.

@@ -1,10 +1,10 @@
-﻿using CommandLine.Core.Hosting.CommandLineUtils.Utilities;
+﻿using CommandLine.Core.CommandLineUtils.Utilities;
 using McMaster.Extensions.CommandLineUtils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CommandLine.Core.Hosting.CommandLineUtils.Options
+namespace CommandLine.Core.CommandLineUtils.Options
 {
     class SharedOptionsBuilder : ISharedOptionsBuilder
     {

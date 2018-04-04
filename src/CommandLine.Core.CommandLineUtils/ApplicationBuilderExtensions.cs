@@ -3,7 +3,7 @@ using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace CommandLine.Core.Hosting.CommandLineUtils
+namespace CommandLine.Core.CommandLineUtils
 {
     public static class ApplicationBuilderExtensions
     {

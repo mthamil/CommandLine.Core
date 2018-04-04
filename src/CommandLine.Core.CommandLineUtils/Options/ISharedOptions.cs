@@ -1,7 +1,7 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
 using System.Collections.Generic;
 
-namespace CommandLine.Core.Hosting.CommandLineUtils.Options
+namespace CommandLine.Core.CommandLineUtils.Options
 {
     /// <summary>
     /// Contains command options shared among multiple commands.
