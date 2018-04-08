@@ -11,7 +11,7 @@ namespace CommandLine.Core.CommandLineUtils.Options
         private readonly IServiceProvider _services;
 
         private IList<Func<IReadOnlyDictionary<string, string>, CommandOption>> _options = new List<Func<IReadOnlyDictionary<string, string>, CommandOption>>();
-        private Lazy<IReadOnlyDictionary<string, string>> _descriptions;
+        private Lazy<IReadOnlyDictionary<string, string>> _descriptions = new Lazy<IReadOnlyDictionary<string, string>>(() => new Dictionary<string, string>(0));
 
         public SharedOptionsBuilder(IServiceProvider services)
         {
@@ -29,10 +29,10 @@ namespace CommandLine.Core.CommandLineUtils.Options
             _options.Add(descriptions =>
             {
                 var option = new CommandOption(template, type) { Inherited = true };
-                option.Description = description ?? descriptions?[CreateResourceKey(option.LongName)];
+                option.Description = description ?? (descriptions.TryGetValue(CreateResourceKey(option.LongName), out var desc) ? desc : null);
                 return option;
             });
-            
+
             return this;
         }
 
