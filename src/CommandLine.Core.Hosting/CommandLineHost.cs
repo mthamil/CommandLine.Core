@@ -45,6 +45,9 @@ namespace CommandLine.Core.Hosting
             return app(_args);
         }
 
+        /// <summary>
+        /// Initializes a new <see cref="CommandLineHostBuilder"/>.
+        /// </summary>
         public static ICommandLineHostBuilder CreateBuilder(string[] args) => new CommandLineHostBuilder(args);
     }
 }
