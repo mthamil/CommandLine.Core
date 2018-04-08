@@ -1,5 +1,4 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -8,17 +7,15 @@ namespace CommandLine.Core.CommandLineUtils.Utilities
 {
     public static class CommandOptionExtensions
     {
-        public static bool IsOn(this CommandOption option)
-        {
-            if (option.OptionType != CommandOptionType.NoValue)
-                throw new InvalidOperationException($"Option must have type '{CommandOptionType.NoValue:G}'.");
-
-            return option.Value() == "on";
-        }
-
+        /// <summary>
+        /// Maps the values of a collection of options to a new instance of a class.
+        /// </summary>
         public static T Map<T>(this IEnumerable<CommandOption> options) where T : new() =>
             options.Map(new T());
 
+        /// <summary>
+        /// Maps the values of a collection of options to an instance of a class.
+        /// </summary>
         public static T Map<T>(this IEnumerable<CommandOption> options, T instance)
         {
             var properties =
@@ -38,7 +35,7 @@ namespace CommandLine.Core.CommandLineUtils.Utilities
             switch (option.OptionType)
             {
                 case CommandOptionType.NoValue:
-                    return option.IsOn();
+                    return option.HasValue();
                 case CommandOptionType.MultipleValue:
                     return option.Values;
                 default:
