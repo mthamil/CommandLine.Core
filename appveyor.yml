@@ -41,6 +41,13 @@ nuget:
   project_feed: true
   disable_publish_on_pr: true
 
+#---------------------------------#
+#       tests configuration       #
+#---------------------------------#
+
+test_script:
+  - ps: Get-ChildItem *.Tests | % { cd $_; dotnet xunit --configuration Debug --fx-version 2.0.0 --no-build; cd ..; }
+
 
 #---------------------------------#
 #      artifacts configuration    #
@@ -61,7 +68,7 @@ deploy:
       appveyor_repo_tag: true
     server: # nuget.org
     api_key:
-      secure: MD0elo1aBPjhlWEc8wb7obFowwHimaZ+I1fEscOXpTckpHLZFmi4MOHrgyRteF/2
+      secure: NPuXv53mhVj9uqIWCqDfbU0I9OP8wkdJwB09ZSBLt/Z0q9znnvzzRqiW/ia5Yn9d
     skip_symbols: false
     symbol_server: # SymbolSource.org
     artifact: /.*\.nupkg/
