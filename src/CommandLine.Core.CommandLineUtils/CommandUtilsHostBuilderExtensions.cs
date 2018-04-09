@@ -11,13 +11,14 @@ using System.Threading.Tasks;
 
 namespace CommandLine.Core.CommandLineUtils
 {
+    /// <summary>
+    /// Provides methods to help integrate with McMaster.Extensions.CommandLineUtils.
+    /// </summary>
     public static class CommandUtilsHostBuilderExtensions
     {
         /// <summary>
         /// Enables integration with McMaster.Extensions.CommandLineUtils.
         /// </summary>
-        /// <param name="builder"></param>
-        /// <returns></returns>
         public static ICommandLineHostBuilder UseCommandLineUtils(this ICommandLineHostBuilder builder) =>
             builder.UseSetting(HostDefaults.WorkingDirectoryKey, Directory.GetCurrentDirectory())
                    .UseSetting(HostDefaults.AllowUnknownArgumentsKey, Boolean.FalseString)

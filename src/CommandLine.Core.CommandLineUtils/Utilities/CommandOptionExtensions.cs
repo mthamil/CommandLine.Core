@@ -5,6 +5,9 @@ using System.Reflection;
 
 namespace CommandLine.Core.CommandLineUtils.Utilities
 {
+    /// <summary>
+    /// Provides utility methods for working with CommandLineUtils.
+    /// </summary>
     public static class CommandOptionExtensions
     {
         /// <summary>

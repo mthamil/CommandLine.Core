@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace CommandLine.Core.Hosting
 {
+    /// <summary>
+    /// Represents a command line application.
+    /// </summary>
     public class CommandLineHost : ICommandLineHost
     {
         private readonly IServiceCollection _appServices;
@@ -15,6 +18,9 @@ namespace CommandLine.Core.Hosting
         private readonly Lazy<IStartup> _startup;
         private readonly IConfiguration _config;
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="CommandLineHost"/>.
+        /// </summary>
         public CommandLineHost(IServiceCollection appServices,
                                IServiceProvider hostingServiceProvider,
                                IConfiguration config,
@@ -33,8 +39,14 @@ namespace CommandLine.Core.Hosting
             });
         }
 
+        /// <summary>
+        /// The <see cref="IServiceProvider" /> for the application.
+        /// </summary>
         public IServiceProvider Services => _appServiceProvider.Value;
 
+        /// <summary>
+        /// Executes the application.
+        /// </summary>
         public Task<int> RunAsync()
         {
             var appBuilder = new ApplicationBuilder(_appServiceProvider.Value);

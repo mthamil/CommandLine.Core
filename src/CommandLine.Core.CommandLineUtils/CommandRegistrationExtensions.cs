@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 namespace CommandLine.Core.CommandLineUtils
 {
+    /// <summary>
+    /// Provides methods to help register and configure the commands in a CommandLineUtils application.
+    /// </summary>
     public static class CommandRegistrationExtensions
     {
         /// <summary>
@@ -44,6 +47,9 @@ namespace CommandLine.Core.CommandLineUtils
         }
     }
 
+    /// <summary>
+    /// A collection of commands added as services.
+    /// </summary>
     public interface ICommandServiceCollection
     {
         /// <summary>

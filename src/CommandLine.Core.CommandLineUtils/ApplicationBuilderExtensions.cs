@@ -5,6 +5,9 @@ using System;
 
 namespace CommandLine.Core.CommandLineUtils
 {
+    /// <summary>
+    /// Provides methods to help configure a CommandLineUtils application.
+    /// </summary>
     public static class ApplicationBuilderExtensions
     {
         /// <summary>
