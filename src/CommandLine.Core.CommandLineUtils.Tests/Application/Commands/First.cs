@@ -2,17 +2,15 @@
 
 namespace CommandLine.Core.CommandLineUtils.Tests.Application.Commands
 {
-    public class FirstCommand : CommandLineApplication
+    public class First
     {
         private readonly IConsole _console;
 
-        public FirstCommand(IConsole console, SecondCommand second)
+        public First(IConsole console)
         {
             _console = console;
-
-            Name = "first";
-            Commands.Add(second);
-            second.Parent = this;
         }
+
+        public Second Subcommand { get; set; }
     }
 }

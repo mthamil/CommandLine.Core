@@ -1,5 +1,4 @@
-﻿using CommandLine.Core.CommandLineUtils.Options;
-using CommandLine.Core.Hosting;
+﻿using CommandLine.Core.Hosting;
 using CommandLine.Core.Hosting.Abstractions;
 using McMaster.Extensions.CommandLineUtils;
 using McMaster.Extensions.CommandLineUtils.HelpText;
@@ -41,20 +40,7 @@ namespace CommandLine.Core.CommandLineUtils
                     config[HostDefaults.WorkingDirectoryKey],
                     !Boolean.Parse(config[HostDefaults.AllowUnknownArgumentsKey]));
 
-                using (var rootScope = provider.CreateScope())
-                {
-                    foreach (var command in rootScope.ServiceProvider.GetServices<CommandLineApplication>())
-                    {
-                        rootApp.Commands.Add(command);
-                        command.Parent = rootApp;
-                    }
-
-                    var sharedOptions = rootScope.ServiceProvider.GetService<ISharedOptions>();
-                    if (sharedOptions != null)
-                    {
-                        rootApp.Options.AddRange(sharedOptions);
-                    }
-                }
+                rootApp.Conventions.UseConventions(provider);
 
                 return rootApp;
             });

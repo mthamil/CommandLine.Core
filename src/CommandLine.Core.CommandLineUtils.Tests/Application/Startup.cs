@@ -12,13 +12,6 @@ namespace CommandLine.Core.CommandLineUtils.Tests.Application
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(Mock.Of<IConsole>());
-
-            services.AddCommands(cmds =>
-                cmds.Base<FirstCommand>()
-                    .Child<SecondCommand>());
-
-            services.AddCommonOptions(opts =>
-                opts.Option("--value"));
         }
 
         public void Configure(IApplicationBuilder app)
@@ -26,6 +19,12 @@ namespace CommandLine.Core.CommandLineUtils.Tests.Application
             app.UseCommands(c =>
             {
                 c.Name = "test";
+
+                c.Options(opts =>
+                    opts.Option<int>("--value", inherited: true));
+
+                c.Command<First>("first",
+                    f => f.Command<Second>("second"));
             });
         }
     }
