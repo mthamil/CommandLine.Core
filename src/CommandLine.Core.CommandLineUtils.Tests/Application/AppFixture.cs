@@ -8,7 +8,6 @@ namespace CommandLine.Core.CommandLineUtils.Tests.Application
     {
         public ICommandLineHost CreateApp(string args) =>
             CommandLineHost.CreateBuilder(args.Split(' ', StringSplitOptions.RemoveEmptyEntries))
-                           .UseCommandLineUtils()
                            .UseStartup<Startup>()
                            .Build();
     }

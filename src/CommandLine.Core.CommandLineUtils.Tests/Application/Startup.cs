@@ -12,11 +12,13 @@ namespace CommandLine.Core.CommandLineUtils.Tests.Application
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(Mock.Of<IConsole>());
+
+            services.AddCommandLineUtils();
         }
 
         public void Configure(IApplicationBuilder app)
         {
-            app.UseCommands(c =>
+            app.UseCommandLineUtils(c =>
             {
                 c.Name = "test";
 

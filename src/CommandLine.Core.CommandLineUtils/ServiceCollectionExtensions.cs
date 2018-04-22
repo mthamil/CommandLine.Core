@@ -5,25 +5,20 @@ using McMaster.Extensions.CommandLineUtils.HelpText;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace CommandLine.Core.CommandLineUtils
 {
     /// <summary>
     /// Provides methods to help integrate with McMaster.Extensions.CommandLineUtils.
     /// </summary>
-    public static class CommandUtilsHostBuilderExtensions
+    public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Enables integration with McMaster.Extensions.CommandLineUtils.
+        /// Adds <c>McMaster.Extensions.CommandLineUtils</c> services.
         /// </summary>
-        public static ICommandLineHostBuilder UseCommandLineUtils(this ICommandLineHostBuilder builder) =>
-            builder.UseSetting(HostDefaults.WorkingDirectoryKey, Directory.GetCurrentDirectory())
-                   .UseSetting(HostDefaults.AllowUnknownArgumentsKey, Boolean.FalseString)
-                   .ConfigureServices(services => services.AddCommonServices()
-                                                          .AddRootApplication()
-                                                          .AddApplicationDelegate());
+        public static IServiceCollection AddCommandLineUtils(this IServiceCollection services) =>
+            services.AddCommonServices()
+                    .AddRootApplication();
 
         private static IServiceCollection AddCommonServices(this IServiceCollection services) =>
             services.AddSingleton(PhysicalConsole.Singleton)
@@ -33,24 +28,17 @@ namespace CommandLine.Core.CommandLineUtils
             services.AddSingleton(provider =>
             {
                 var config = provider.GetService<IConfiguration>();
+                var environment = provider.GetService<IHostingEnvironment>();
 
                 var rootApp = new RootCommandLineApplication(
                     provider.GetService<IHelpTextGenerator>(),
                     provider.GetService<IConsole>(),
-                    config[HostDefaults.WorkingDirectoryKey],
-                    !Boolean.Parse(config[HostDefaults.AllowUnknownArgumentsKey]));
+                    environment.WorkingDirectory,
+                    !Boolean.Parse(config[HostDefaults.AllowUnknownArgumentsKey] ?? Boolean.FalseString));
 
                 rootApp.Conventions.UseConventions(provider);
 
                 return rootApp;
             });
-
-        private static IServiceCollection AddApplicationDelegate(this IServiceCollection services) =>
-            services.AddSingleton(provider =>
-            {
-                var app = provider.GetRequiredService<RootCommandLineApplication>();
-                return new ApplicationDelegate(args => Task.FromResult(app.Execute(args)));
-            });
-
     }
 }
