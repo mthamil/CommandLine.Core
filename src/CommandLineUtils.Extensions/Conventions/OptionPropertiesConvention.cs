@@ -8,10 +8,14 @@ using System.Reflection;
 namespace CommandLineUtils.Extensions.Conventions
 {
     /// <summary>
-    /// A convention that sets properties on command models from matching options.
+    /// A convention that sets properties on command models using the values from matching options.
     /// </summary>
     public class OptionPropertiesConvention : IConvention
     {
+        /// <summary>
+        /// Applies the convention.
+        /// </summary>
+        /// <param name="context">The context in which the convention is applied.</param>
         public void Apply(ConventionContext context)
         {
             if (context.ModelType == null)
@@ -29,18 +33,38 @@ namespace CommandLineUtils.Extensions.Conventions
 
             context.Application.OnParsingComplete(r =>
             {
-                if (r.SelectedCommand is IModelAccessor modelAccessor)
+                var command = r.SelectedCommand
+                    .CommandChain()
+                    .FirstOrDefault(c => ReferenceEquals(c, context.Application));
+
+                if (command is IModelAccessor modelAccessor)
                 {
                     foreach (var (property, option) in optionsWithProperties)
                     {
-                        var parsedValue = option.GetType().GetProperty(nameof(CommandOption<object>.ParsedValue));
-                        if (parsedValue?.PropertyType == property.PropertyType)
+                        var value = GetValue(property, option);
+                        if (value != null)
                         {
-                            property.SetValue(modelAccessor.GetModel(), parsedValue.GetValue(option));
+                            property.SetValue(modelAccessor.GetModel(), value);
                         }
                     }
                 }
             });
+        }
+
+        private static object GetValue(PropertyInfo property, CommandOption option)
+        {
+            if (option.OptionType == CommandOptionType.NoValue && property.PropertyType == typeof(bool))
+            {
+                return option.HasValue();
+            }
+
+            var parsedValue = option.GetType().GetProperty(nameof(CommandOption<object>.ParsedValue));
+            if (parsedValue?.PropertyType == property.PropertyType)
+            {
+                return parsedValue.GetValue(option);
+            }
+
+            return null;
         }
     }
 }
