@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <IncludeSymbols>True</IncludeSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Product>CommandLineUtils.Extras</Product>
+    <Description>Provides additional builders, conventions, and more for use with McMaster.Extensions.CommandLineUtils.</Description>
+    <Authors>Matt Hamilton</Authors>
+    <Copyright>Copyright 2018 Matt Hamilton</Copyright>
+    <PackageProjectUrl>https://github.com/mthamil/CommandLine.Core</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/mthamil/CommandLine.Core</RepositoryUrl>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/mthamil/CommandLine.Core/master/LICENSE</PackageLicenseUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.2.1" />
+  </ItemGroup>
+
+</Project>

@@ -1,14 +1,15 @@
-﻿using McMaster.Extensions.CommandLineUtils;
+﻿using CommandLineUtils.Extensions.Utilities;
+using McMaster.Extensions.CommandLineUtils;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace CommandLine.Core.CommandLineUtils.Utilities
+namespace CommandLineUtils.Extensions.Options
 {
     /// <summary>
-    /// Provides utility methods for working with CommandLineUtils.
+    /// Provides methods for mapping <see cref="CommandOption"/>s to POCO object instances.
     /// </summary>
-    public static class CommandOptionExtensions
+    public static class MappingExtensions
     {
         /// <summary>
         /// Maps the values of a collection of options to a new instance of a class.

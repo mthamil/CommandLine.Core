@@ -1,10 +1,6 @@
-﻿using CommandLine.Core.Hosting;
-using CommandLine.Core.Hosting.Abstractions;
-using McMaster.Extensions.CommandLineUtils;
+﻿using McMaster.Extensions.CommandLineUtils;
 using McMaster.Extensions.CommandLineUtils.HelpText;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 
 namespace CommandLine.Core.CommandLineUtils
 {
@@ -25,20 +21,6 @@ namespace CommandLine.Core.CommandLineUtils
                     .AddSingleton<IHelpTextGenerator>(DefaultHelpTextGenerator.Singleton);
 
         private static IServiceCollection AddRootApplication(this IServiceCollection services) =>
-            services.AddSingleton(provider =>
-            {
-                var config = provider.GetService<IConfiguration>();
-                var environment = provider.GetService<IHostingEnvironment>();
-
-                var rootApp = new RootCommandLineApplication(
-                    provider.GetService<IHelpTextGenerator>(),
-                    provider.GetService<IConsole>(),
-                    environment.WorkingDirectory,
-                    !Boolean.Parse(config[HostDefaults.AllowUnknownArgumentsKey] ?? Boolean.FalseString));
-
-                rootApp.Conventions.UseDefaultConventionsWithServices(provider);
-
-                return rootApp;
-            });
+            services.AddSingleton<RootCommandLineApplication>();
     }
 }

@@ -1,7 +1,7 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
 using System;
 
-namespace CommandLine.Core.CommandLineUtils.Options
+namespace CommandLineUtils.Extensions.Options
 {
     /// <summary>
     /// Provides methods to configure the options in an application that are shared by all commands.

@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace CommandLine.Core.CommandLineUtils.Utilities
+namespace CommandLineUtils.Extensions.Utilities
 {
     static class StringExtensions
     {

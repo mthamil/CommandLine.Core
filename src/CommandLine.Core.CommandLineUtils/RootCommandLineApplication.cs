@@ -1,5 +1,9 @@
-﻿using McMaster.Extensions.CommandLineUtils;
+﻿using CommandLine.Core.Hosting;
+using CommandLine.Core.Hosting.Abstractions;
+using McMaster.Extensions.CommandLineUtils;
 using McMaster.Extensions.CommandLineUtils.HelpText;
+using Microsoft.Extensions.Configuration;
+using System;
 
 namespace CommandLine.Core.CommandLineUtils
 {
@@ -13,9 +17,12 @@ namespace CommandLine.Core.CommandLineUtils
         /// </summary>
         public RootCommandLineApplication(IHelpTextGenerator helpTextGenerator,
                                           IConsole console,
-                                          string workingDirectory,
-                                          bool throwOnUnexpectedArg)
-            : base(helpTextGenerator, console, workingDirectory, throwOnUnexpectedArg)
+                                          IHostingEnvironment environment,
+                                          IConfiguration configuration)
+            : base(helpTextGenerator,
+                   console,
+                   environment.WorkingDirectory,
+                   !Boolean.Parse(configuration[HostDefaults.AllowUnknownArgumentsKey] ?? Boolean.FalseString))
         {
         }
     }

@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace CommandLine.Core.CommandLineUtils.Options
+namespace CommandLineUtils.Extensions.Options
 {
     /// <summary>
     /// Provides command option configuration.

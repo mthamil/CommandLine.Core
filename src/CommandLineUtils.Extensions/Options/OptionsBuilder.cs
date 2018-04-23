@@ -1,10 +1,10 @@
-﻿using CommandLine.Core.CommandLineUtils.Utilities;
+﻿using CommandLineUtils.Extensions.Utilities;
 using McMaster.Extensions.CommandLineUtils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CommandLine.Core.CommandLineUtils.Options
+namespace CommandLineUtils.Extensions.Options
 {
     class OptionsBuilder : IOptionsBuilder
     {

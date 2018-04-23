@@ -20,6 +20,7 @@ namespace CommandLine.Core.CommandLineUtils
             app.Use(args =>
             {
                 var rootApp = app.ApplicationServices.GetService<RootCommandLineApplication>();
+                rootApp.Conventions.UseDefaultConventionsWithServices(app.ApplicationServices);
                 configureApp?.Invoke(rootApp);
                 return Task.FromResult(rootApp.Execute(args));
             });

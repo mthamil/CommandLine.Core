@@ -1,4 +1,4 @@
-﻿using CommandLine.Core.CommandLineUtils.Options;
+﻿using CommandLineUtils.Extensions.Options;
 using CommandLine.Core.CommandLineUtils.Tests.Application.Commands;
 using CommandLine.Core.Hosting.Abstractions;
 using McMaster.Extensions.CommandLineUtils;
