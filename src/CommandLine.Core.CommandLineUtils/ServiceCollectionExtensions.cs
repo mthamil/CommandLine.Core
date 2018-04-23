@@ -36,7 +36,7 @@ namespace CommandLine.Core.CommandLineUtils
                     environment.WorkingDirectory,
                     !Boolean.Parse(config[HostDefaults.AllowUnknownArgumentsKey] ?? Boolean.FalseString));
 
-                rootApp.Conventions.UseConventions(provider);
+                rootApp.Conventions.UseDefaultConventionsWithServices(provider);
 
                 return rootApp;
             });
