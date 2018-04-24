@@ -5,6 +5,6 @@ namespace CommandLineUtils.Extensions.Utilities
     static class StringExtensions
     {
         public static string ToPascalCase(this string s) =>
-            Regex.Replace(s, "(_|-|^)[a-z]", m => m.Value.TrimStart('-').ToUpperInvariant());
+            Regex.Replace(s, "(_|-|^)[a-z]", m => m.Value.TrimStart('-', '_').ToUpperInvariant());
     }
 }
