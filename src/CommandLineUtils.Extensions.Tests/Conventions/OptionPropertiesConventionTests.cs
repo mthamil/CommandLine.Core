@@ -11,14 +11,14 @@ namespace CommandLineUtils.Extensions.Tests.Conventions
         public OptionPropertiesConventionTests()
         {
             _app = new CommandLineApplication<AppModel>();
+            _app.Conventions.UseOptionProperties()
+                            .SetSubcommandPropertyOnModel();
+
             _app.Option<string>("-n|--name", string.Empty, CommandOptionType.SingleValue);
             _app.Option<int>("-i|--id", string.Empty, CommandOptionType.SingleValue);
 
             _app.Command<ChildModel>("child", c =>
                 c.Option("--enabled", string.Empty, CommandOptionType.NoValue));
-
-            _app.Conventions.UseOptionProperties()
-                            .SetSubcommandPropertyOnModel();
         }
 
         [Fact]

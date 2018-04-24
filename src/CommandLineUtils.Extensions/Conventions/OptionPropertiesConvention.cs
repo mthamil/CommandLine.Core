@@ -18,17 +18,7 @@ namespace CommandLineUtils.Extensions.Conventions
         /// <param name="context">The context in which the convention is applied.</param>
         public void Apply(ConventionContext context)
         {
-            if (context.ModelType == null)
-                return;
-
-            var optionsWithProperties = (
-                from property in context.ModelType.GetTypeInfo().GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                where property.CanRead && property.CanWrite
-                join option in context.Application.Options on property.Name equals option.LongName.ToPascalCase()
-                select (property, option)
-            ).ToList();
-
-            if (optionsWithProperties.Count == 0)
+            if (context.ModelType == null || !context.ModelType.GetRuntimeProperties().Any())
                 return;
 
             context.Application.OnParsingComplete(r =>
@@ -39,6 +29,12 @@ namespace CommandLineUtils.Extensions.Conventions
 
                 if (command is IModelAccessor modelAccessor)
                 {
+                    var optionsWithProperties =
+                        from property in context.ModelType.GetRuntimeProperties()
+                        where property.CanRead && property.CanWrite
+                        join option in context.Application.Options on property.Name equals option.LongName.ToPascalCase()
+                        select (property, option);
+
                     foreach (var (property, option) in optionsWithProperties)
                     {
                         var value = GetValue(property, option);
