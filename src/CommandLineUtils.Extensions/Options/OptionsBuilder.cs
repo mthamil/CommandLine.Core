@@ -8,19 +8,12 @@ namespace CommandLineUtils.Extensions.Options
 {
     class OptionsBuilder : IOptionsBuilder
     {
-        private readonly IServiceProvider _services;
-
         private IList<Func<CommandLineApplication, CommandOption>> _options = new List<Func<CommandLineApplication, CommandOption>>();
-        private Func<string, string> _descriptions = _ => null;
+        private Lazy<Func<string, string>> _descriptionProvider = new Lazy<Func<string, string>>(() => _ => null);
 
-        public OptionsBuilder(IServiceProvider services)
+        public IOptionsBuilder WithDescriptionsFrom(Func<Func<string, string>> descriptionProvider)
         {
-            _services = services ?? throw new ArgumentNullException(nameof(services));
-        }
-
-        public IOptionsBuilder WithDescriptionsFrom(Func<IServiceProvider, Func<string, string>> descriptionProvider)
-        {
-            _descriptions = key => descriptionProvider(_services)(key);
+            _descriptionProvider = new Lazy<Func<string, string>>(descriptionProvider);
             return this;
         }
 
@@ -30,7 +23,7 @@ namespace CommandLineUtils.Extensions.Options
             {
                 var option = app.Option(template, string.Empty, type);
                 option.Inherited = inherited;
-                option.Description = description ?? _descriptions(CreateResourceKey(option.LongName));
+                option.Description = description ?? _descriptionProvider.Value(CreateResourceKey(option.LongName));
                 return option;
             });
 
@@ -43,7 +36,7 @@ namespace CommandLineUtils.Extensions.Options
             {
                 var option = app.Option<T>(template, string.Empty, type);
                 option.Inherited = inherited;
-                option.Description = description ?? _descriptions(CreateResourceKey(option.LongName));
+                option.Description = description ?? _descriptionProvider.Value(CreateResourceKey(option.LongName));
                 return option;
             });
 

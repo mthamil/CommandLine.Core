@@ -1,6 +1,6 @@
-﻿using CommandLineUtils.Extensions.Options;
-using CommandLine.Core.CommandLineUtils.Tests.Application.Commands;
+﻿using CommandLine.Core.CommandLineUtils.Tests.Application.Commands;
 using CommandLine.Core.Hosting.Abstractions;
+using CommandLineUtils.Extensions;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;

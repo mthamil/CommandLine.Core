@@ -1,19 +1,20 @@
-﻿using McMaster.Extensions.CommandLineUtils;
+﻿using CommandLineUtils.Extensions.Options;
+using McMaster.Extensions.CommandLineUtils;
 using System;
 
-namespace CommandLineUtils.Extensions.Options
+namespace CommandLineUtils.Extensions
 {
     /// <summary>
-    /// Provides methods to configure the options in an application that are shared by all commands.
+    /// Provides access to builders that help to configure <see cref="CommandLineApplication"/>s.
     /// </summary>
-    public static class OptionsBuilderExtensions
+    public static class CommandBuilderExtensions
     {
         /// <summary>
-        /// Builds application options.
+        /// Builds command options.
         /// </summary>
         public static TCommand Options<TCommand>(this TCommand command, Action<IOptionsBuilder> optionsBuilder) where TCommand : CommandLineApplication
         {
-            var builder = new OptionsBuilder(command);
+            var builder = new OptionsBuilder();
             optionsBuilder(builder);
             builder.Apply(command);
 

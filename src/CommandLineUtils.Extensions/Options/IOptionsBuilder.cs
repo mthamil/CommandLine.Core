@@ -13,7 +13,7 @@ namespace CommandLineUtils.Extensions.Options
         /// This should be a dictionary keyed by option long names.
         /// </summary>
         /// <param name="descriptionProvider">A function providing a mapping between option long names and description strings.</param>
-        IOptionsBuilder WithDescriptionsFrom(Func<IServiceProvider, Func<string, string>> descriptionProvider);
+        IOptionsBuilder WithDescriptionsFrom(Func<Func<string, string>> descriptionProvider);
 
         /// <summary>
         /// Registers a new shared command option.
