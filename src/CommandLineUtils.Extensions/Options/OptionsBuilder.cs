@@ -11,16 +11,16 @@ namespace CommandLineUtils.Extensions.Options
         private readonly IServiceProvider _services;
 
         private IList<Func<CommandLineApplication, CommandOption>> _options = new List<Func<CommandLineApplication, CommandOption>>();
-        private Lazy<IReadOnlyDictionary<string, string>> _descriptions = new Lazy<IReadOnlyDictionary<string, string>>(() => new Dictionary<string, string>(0));
+        private Func<string, string> _descriptions = _ => null;
 
         public OptionsBuilder(IServiceProvider services)
         {
             _services = services ?? throw new ArgumentNullException(nameof(services));
         }
 
-        public IOptionsBuilder WithDescriptionsFrom(Func<IServiceProvider, IReadOnlyDictionary<string, string>> descriptionProvider)
+        public IOptionsBuilder WithDescriptionsFrom(Func<IServiceProvider, Func<string, string>> descriptionProvider)
         {
-            _descriptions = new Lazy<IReadOnlyDictionary<string, string>>(() => descriptionProvider(_services));
+            _descriptions = key => descriptionProvider(_services)(key);
             return this;
         }
 
@@ -30,7 +30,7 @@ namespace CommandLineUtils.Extensions.Options
             {
                 var option = app.Option(template, string.Empty, type);
                 option.Inherited = inherited;
-                option.Description = description ?? (_descriptions.Value.TryGetValue(CreateResourceKey(option.LongName), out var desc) ? desc : null);
+                option.Description = description ?? _descriptions(CreateResourceKey(option.LongName));
                 return option;
             });
 
@@ -43,7 +43,7 @@ namespace CommandLineUtils.Extensions.Options
             {
                 var option = app.Option<T>(template, string.Empty, type);
                 option.Inherited = inherited;
-                option.Description = description ?? (_descriptions.Value.TryGetValue(CreateResourceKey(option.LongName), out var desc) ? desc : null);
+                option.Description = description ?? _descriptions(CreateResourceKey(option.LongName));
                 return option;
             });
 
