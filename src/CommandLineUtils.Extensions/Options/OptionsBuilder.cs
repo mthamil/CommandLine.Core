@@ -8,8 +8,13 @@ namespace CommandLineUtils.Extensions.Options
 {
     class OptionsBuilder : IOptionsBuilder
     {
-        private IList<Func<CommandLineApplication, CommandOption>> _options = new List<Func<CommandLineApplication, CommandOption>>();
+        private readonly IList<Func<CommandLineApplication, CommandOption>> _options = new List<Func<CommandLineApplication, CommandOption>>();
         private Lazy<Func<string, string>> _descriptionProvider = new Lazy<Func<string, string>>(() => _ => null);
+
+        public OptionsBuilder(CommandLineApplication command)
+        {
+            Command = command ?? throw new ArgumentNullException(nameof(command));
+        }
 
         public IOptionsBuilder WithDescriptionsFrom(Func<Func<string, string>> descriptionProvider)
         {
@@ -43,8 +48,10 @@ namespace CommandLineUtils.Extensions.Options
             return this;
         }
 
-        internal void Apply(CommandLineApplication app) =>
-            _options.Select(f => f(app))
+        public CommandLineApplication Command { get; }
+
+        internal void Build() =>
+            _options.Select(f => f(Command))
                     .ToList();
 
         private static string CreateResourceKey(string longName) => longName.ToPascalCase();

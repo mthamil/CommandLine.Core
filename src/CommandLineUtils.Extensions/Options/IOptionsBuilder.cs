@@ -33,5 +33,10 @@ namespace CommandLineUtils.Extensions.Options
         /// <param name="type">The option's type.</param>
         /// <param name="inherited">Whether an option should be inherited by child commands.</param>
         IOptionsBuilder Option<T>(string template, string description = null, CommandOptionType type = CommandOptionType.SingleValue, bool inherited = false);
+
+        /// <summary>
+        /// The command for which options are being configured.
+        /// </summary>
+        CommandLineApplication Command { get; }
     }
 }
