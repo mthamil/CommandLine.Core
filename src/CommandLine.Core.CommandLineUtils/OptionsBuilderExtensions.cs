@@ -12,7 +12,7 @@ namespace CommandLine.Core.CommandLineUtils
     public static class OptionsBuilderExtensions
     {
         /// <summary>
-        /// Specifies that a <see cref="CommandOption"/> descriptions should come from resource files.
+        /// Specifies that a <see cref="CommandOption"/> descriptions should come from a resource file.
         /// </summary>
         /// <typeparam name="TResources">The resource type.</typeparam>
         /// <param name="builder">The builder.</param>

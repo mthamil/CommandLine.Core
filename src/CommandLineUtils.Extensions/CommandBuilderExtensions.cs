@@ -14,9 +14,9 @@ namespace CommandLineUtils.Extensions
         /// </summary>
         public static TCommand Options<TCommand>(this TCommand command, Action<IOptionsBuilder> optionsBuilder) where TCommand : CommandLineApplication
         {
-            var builder = new OptionsBuilder();
+            var builder = new OptionsBuilder(command);
             optionsBuilder(builder);
-            builder.Apply(command);
+            builder.Build();
 
             return command;
         }
