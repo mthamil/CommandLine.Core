@@ -66,7 +66,7 @@ namespace CommandLineUtils.Extensions.Conventions
             where property.CanRead && property.CanWrite
             let suffixIndex = String.IsNullOrEmpty(PropertySuffix)? property.Name.Length : property.Name.IndexOf(PropertySuffix)
             where suffixIndex > -1
-            join option in application.Options on FormatPropertyName(property, suffixIndex) equals FormatOptionName(option)
+            join option in application.GetOptions() on FormatPropertyName(property, suffixIndex) equals FormatOptionName(option)
             select ((PropertyInfo)null, property, option);
 
         private IEnumerable<(PropertyInfo, PropertyInfo, CommandOption)> GetNestedProperties(CommandLineApplication application, Type type) =>
