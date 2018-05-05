@@ -9,6 +9,7 @@ namespace CommandLineUtils.Extensions.Tests.Utilities
         [InlineData("enabled", "Enabled")]
         [InlineData("by-name", "ByName")]
         [InlineData("by_name", "ByName")]
+        [InlineData("child-item", "ChildItem")]
         public void Test_ToPascalCase(string input, string expected)
         {
             // Act.

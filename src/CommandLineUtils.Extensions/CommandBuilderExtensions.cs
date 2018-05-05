@@ -17,7 +17,6 @@ namespace CommandLineUtils.Extensions
             var builder = new OptionsBuilder(command);
             optionsBuilder(builder);
             builder.Build();
-
             return command;
         }
     }

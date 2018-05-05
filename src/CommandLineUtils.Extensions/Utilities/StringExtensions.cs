@@ -1,10 +1,12 @@
-﻿using System.Text.RegularExpressions;
+﻿using Humanizer;
 
 namespace CommandLineUtils.Extensions.Utilities
 {
     static class StringExtensions
     {
-        public static string ToPascalCase(this string s) =>
-            Regex.Replace(s, "(_|-|^)[a-z]", m => m.Value.TrimStart('-', '_').ToUpperInvariant());
+        /// <summary>
+        /// Converts kebab or underscore case to pascal case.
+        /// </summary>
+        public static string ToPascalCase(this string s) => s.Replace('-', '_').Pascalize();
     }
 }

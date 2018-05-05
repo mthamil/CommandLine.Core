@@ -1,4 +1,5 @@
 ﻿using CommandLine.Core.Hosting.Abstractions;
+using CommandLineUtils.Extensions.Conventions;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using System;

@@ -1,7 +1,10 @@
 ﻿using CommandLineUtils.Extensions.Utilities;
+using Humanizer;
 using McMaster.Extensions.CommandLineUtils;
 using McMaster.Extensions.CommandLineUtils.Abstractions;
 using McMaster.Extensions.CommandLineUtils.Conventions;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -12,6 +15,16 @@ namespace CommandLineUtils.Extensions.Conventions
     /// </summary>
     public class OptionPropertiesConvention : IConvention
     {
+        /// <summary>
+        /// The naming suffix to use for properties of a nested complex type (non-primitive) that option values should be mapped to.
+        /// </summary>
+        public string NestedPropertySuffix { get; set; } = "Options";
+
+        /// <summary>
+        /// The naming suffix for candidate properties that should have option values mapped to them.
+        /// </summary>
+        public string PropertySuffix { get; set; } = "";
+
         /// <summary>
         /// Applies the convention.
         /// </summary>
@@ -29,38 +42,90 @@ namespace CommandLineUtils.Extensions.Conventions
 
                 if (command is IModelAccessor modelAccessor)
                 {
-                    var optionsWithProperties =
-                        from property in context.ModelType.GetRuntimeProperties()
-                        where property.CanRead && property.CanWrite
-                        join option in context.Application.Options on property.Name equals option.LongName.ToPascalCase()
-                        select (property, option);
+                    var optionsWithProperties = GetSimpleProperties(context.Application, context.ModelType).Concat(
+                                                GetNestedProperties(context.Application, context.ModelType));
 
-                    foreach (var (property, option) in optionsWithProperties)
+                    foreach (var (parentProperty, property, option) in optionsWithProperties)
                     {
                         var value = GetValue(property, option);
                         if (value != null)
                         {
-                            property.SetValue(modelAccessor.GetModel(), value);
+                            object target = modelAccessor.GetModel();
+                            if (parentProperty != null)
+                                target = GetNestedInstance(target, parentProperty);
+
+                            property.SetValue(target, value);
                         }
                     }
                 }
             });
         }
 
+        private IEnumerable<(PropertyInfo, PropertyInfo, CommandOption)> GetSimpleProperties(CommandLineApplication application, Type type) =>
+            from property in type.GetRuntimeProperties()
+            where property.CanRead && property.CanWrite
+            let suffixIndex = String.IsNullOrEmpty(PropertySuffix)? property.Name.Length : property.Name.IndexOf(PropertySuffix)
+            where suffixIndex > -1
+            join option in application.Options on FormatPropertyName(property, suffixIndex) equals FormatOptionName(option)
+            select ((PropertyInfo)null, property, option);
+
+        private IEnumerable<(PropertyInfo, PropertyInfo, CommandOption)> GetNestedProperties(CommandLineApplication application, Type type) =>
+            from property in type.GetRuntimeProperties()
+            where property.CanRead && property.CanWrite && property.PropertyType.GetConstructor(new Type[0]) != null
+            let suffixIndex = String.IsNullOrEmpty(NestedPropertySuffix) ? property.Name.Length : property.Name.IndexOf(NestedPropertySuffix)
+            where suffixIndex > -1
+            from childProperty in GetSimpleProperties(application, property.PropertyType)
+            select (property, childProperty.Item2, childProperty.Item3);
+
+        private static string FormatPropertyName(PropertyInfo property, int suffixIndex) =>
+            property.Name.Substring(0, suffixIndex);
+
+        private static string FormatOptionName(CommandOption option) => 
+            option.OptionType == CommandOptionType.MultipleValue
+                ? option.LongName.ToPascalCase().Pluralize()
+                : option.LongName.ToPascalCase();
+
+        private object GetNestedInstance(object parent, PropertyInfo parentProperty)
+        {
+            var nested = parentProperty.GetValue(parent);
+            if (nested == null)
+            {
+                // Instantiate POCO object for holding nested option properties.
+                nested = Activator.CreateInstance(parentProperty.PropertyType);
+                parentProperty.SetValue(parent, nested);
+            }
+
+            return nested;
+        }
+
         private static object GetValue(PropertyInfo property, CommandOption option)
         {
-            if (option.OptionType == CommandOptionType.NoValue && property.PropertyType == typeof(bool))
+            switch (option.OptionType)
             {
-                return option.HasValue();
-            }
+                case CommandOptionType.NoValue when property.PropertyType == typeof(bool):
+                    return option.HasValue();
 
-            var parsedValue = option.GetType().GetProperty(nameof(CommandOption<object>.ParsedValue));
-            if (parsedValue?.PropertyType == property.PropertyType)
-            {
-                return parsedValue.GetValue(option);
-            }
+                case CommandOptionType.SingleValue:
+                case CommandOptionType.SingleOrNoValue:
+                    if (!option.HasValue())
+                        return null;
 
-            return null;
+                    var parsedValue = option.GetType().GetProperty(nameof(CommandOption<object>.ParsedValue));
+                    var value = parsedValue?.GetValue(option) ?? option.Value();
+                    return value != null && property.PropertyType.IsAssignableFrom(value.GetType())
+                        ? value
+                        : null;
+
+                case CommandOptionType.MultipleValue:
+                    var parsedValues = option.GetType().GetProperty(nameof(CommandOption<object>.ParsedValues));
+                    var values = parsedValues.GetValue(option);
+                    return property.PropertyType.IsAssignableFrom(values.GetType())
+                        ? values
+                        : null;
+
+                default:
+                    return null;
+            }
         }
     }
 }
