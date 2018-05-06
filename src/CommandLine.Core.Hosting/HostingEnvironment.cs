@@ -11,16 +11,16 @@ namespace CommandLine.Core.Hosting
         {
             ApplicationName = config[HostDefaults.ApplicationNameKey];
             EnvironmentName = config[HostDefaults.EnvironmentNameKey] ?? EnvironmentName;
-            WorkingDirectory = config[HostDefaults.WorkingDirectoryKey] ?? Directory.GetCurrentDirectory();
+            WorkingDirectory = config[HostDefaults.WorkingDirectoryKey] ?? WorkingDirectory;
             WorkingDirectoryFileProvider = new PhysicalFileProvider(WorkingDirectory);
         }
 
-        public string ApplicationName { get; set; }
+        public string ApplicationName { get; private set; }
 
-        public string EnvironmentName { get; set; } = "Development";
+        public string EnvironmentName { get; private set; } = "Development";
 
-        public string WorkingDirectory { get; set; }
+        public string WorkingDirectory { get; private set; } = Directory.GetCurrentDirectory();
 
-        public IFileProvider WorkingDirectoryFileProvider { get; set; }
+        public IFileProvider WorkingDirectoryFileProvider { get; private set; }
     }
 }
