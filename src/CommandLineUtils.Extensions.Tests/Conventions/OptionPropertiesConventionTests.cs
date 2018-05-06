@@ -15,7 +15,7 @@ namespace CommandLineUtils.Extensions.Tests.Conventions
             _app.Conventions.SetSubcommandPropertyOnModel();
 
             _app.Option<string>("-n|--name", string.Empty, CommandOptionType.SingleValue);
-            _app.Option<int>("-i|--id", string.Empty, CommandOptionType.SingleValue);
+            _app.Option<int>("-i|--id", string.Empty, CommandOptionType.SingleValue, true);
             
             _app.Option<int?>("--int-value", string.Empty, CommandOptionType.SingleValue);
             _app.Option<string>("--string-value", string.Empty, CommandOptionType.SingleValue);
@@ -44,6 +44,7 @@ namespace CommandLineUtils.Extensions.Tests.Conventions
             Assert.Null(_app.Model.Description);
             Assert.True(_app.Model.Subcommand.Enabled);
             Assert.Equal("testing...", _app.Model.Subcommand.Description);
+            Assert.Equal(10, _app.Model.Subcommand.Id);
             Assert.Equal(new[] { 1, 2, 3 }, _app.Model.Subcommand.Items);
             Assert.Empty(_app.Model.Subcommand.EmptyItems);
         }
@@ -126,6 +127,8 @@ namespace CommandLineUtils.Extensions.Tests.Conventions
             public bool Enabled { get; set; }
 
             public bool EnabledOption { get; set; }
+
+            public int Id { get; set; }
 
             public string Description { get; set; }
 
