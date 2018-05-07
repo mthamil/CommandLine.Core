@@ -6,6 +6,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <IncludeSymbols>True</IncludeSymbols>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -20,14 +21,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.0.0" />
+    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.2.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="2.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CommandLine.Core.Hosting.Abstractions\CommandLine.Core.Hosting.Abstractions.csproj" />
     <ProjectReference Include="..\CommandLine.Core.Hosting\CommandLine.Core.Hosting.csproj" />
+    <ProjectReference Include="..\CommandLineUtils.Extensions\CommandLineUtils.Extensions.csproj" />
   </ItemGroup>
 
 </Project>

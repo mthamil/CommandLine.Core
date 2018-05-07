@@ -10,8 +10,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Product>CommandLine.Core.Hosting.Abstractions</Product>
-    <Description>Hosting and startup abstractions for command line applications.</Description>
+    <Product>CommandLineUtils.Extras</Product>
+    <Description>Provides additional builders, conventions, and more for use with McMaster.Extensions.CommandLineUtils.</Description>
     <Authors>Matt Hamilton</Authors>
     <Copyright>Copyright 2018 Matt Hamilton</Copyright>
     <PackageProjectUrl>https://github.com/mthamil/CommandLine.Core</PackageProjectUrl>
@@ -21,8 +21,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="2.0.1" />
+    <PackageReference Include="Humanizer.Core" Version="2.1.0" />
+    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.2.1" />
   </ItemGroup>
 
 </Project>
