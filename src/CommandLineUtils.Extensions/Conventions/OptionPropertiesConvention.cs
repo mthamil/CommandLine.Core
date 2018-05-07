@@ -1,4 +1,5 @@
-﻿using CommandLineUtils.Extensions.Utilities;
+﻿using CommandLineUtils.Extensions.Options;
+using CommandLineUtils.Extensions.Utilities;
 using Humanizer;
 using McMaster.Extensions.CommandLineUtils;
 using McMaster.Extensions.CommandLineUtils.Abstractions;
@@ -47,7 +48,7 @@ namespace CommandLineUtils.Extensions.Conventions
 
                     foreach (var (parentProperty, property, option) in optionsWithProperties)
                     {
-                        var value = GetValue(property, option);
+                        var value = option.GetValue(property.PropertyType);
                         if (value != null)
                         {
                             object target = modelAccessor.GetModel();
@@ -63,7 +64,7 @@ namespace CommandLineUtils.Extensions.Conventions
 
         private IEnumerable<(PropertyInfo, PropertyInfo, CommandOption)> GetSimpleProperties(CommandLineApplication application, Type type) =>
             from property in type.GetRuntimeProperties()
-            where property.CanRead && property.CanWrite
+            where property.CanWrite
             let suffixIndex = String.IsNullOrEmpty(PropertySuffix)? property.Name.Length : property.Name.IndexOf(PropertySuffix)
             where suffixIndex > -1
             join option in application.GetOptions() on FormatPropertyName(property, suffixIndex) equals FormatOptionName(option)
@@ -96,36 +97,6 @@ namespace CommandLineUtils.Extensions.Conventions
             }
 
             return nested;
-        }
-
-        private static object GetValue(PropertyInfo property, CommandOption option)
-        {
-            switch (option.OptionType)
-            {
-                case CommandOptionType.NoValue when property.PropertyType == typeof(bool):
-                    return option.HasValue();
-
-                case CommandOptionType.SingleValue:
-                case CommandOptionType.SingleOrNoValue:
-                    if (!option.HasValue())
-                        return null;
-
-                    var parsedValue = option.GetType().GetProperty(nameof(CommandOption<object>.ParsedValue));
-                    var value = parsedValue?.GetValue(option) ?? option.Value();
-                    return value != null && property.PropertyType.IsAssignableFrom(value.GetType())
-                        ? value
-                        : null;
-
-                case CommandOptionType.MultipleValue:
-                    var parsedValues = option.GetType().GetProperty(nameof(CommandOption<object>.ParsedValues));
-                    var values = parsedValues.GetValue(option);
-                    return property.PropertyType.IsAssignableFrom(values.GetType())
-                        ? values
-                        : null;
-
-                default:
-                    return null;
-            }
         }
     }
 }
