@@ -55,7 +55,8 @@ namespace CommandLineUtils.Extensions.Conventions
                             if (parentProperty != null)
                                 target = GetNestedInstance(target, parentProperty);
 
-                            property.SetValue(target, value);
+                            if (target != null)
+                                property.SetValue(target, value);
                         }
                     }
                 }
@@ -72,7 +73,7 @@ namespace CommandLineUtils.Extensions.Conventions
 
         private IEnumerable<(PropertyInfo, PropertyInfo, CommandOption)> GetNestedProperties(CommandLineApplication application, Type type) =>
             from property in type.GetRuntimeProperties()
-            where property.CanRead && property.CanWrite && property.PropertyType.GetConstructor(new Type[0]) != null
+            where property.CanRead && property.CanWrite
             let suffixIndex = String.IsNullOrEmpty(NestedPropertySuffix) ? property.Name.Length : property.Name.IndexOf(NestedPropertySuffix)
             where suffixIndex > -1
             from childProperty in GetSimpleProperties(application, property.PropertyType)
@@ -89,7 +90,7 @@ namespace CommandLineUtils.Extensions.Conventions
         private object GetNestedInstance(object parent, PropertyInfo parentProperty)
         {
             var nested = parentProperty.GetValue(parent);
-            if (nested == null)
+            if (nested == null && parentProperty.PropertyType.GetConstructor(new Type[0]) != null)
             {
                 // Instantiate POCO object for holding nested option properties.
                 nested = Activator.CreateInstance(parentProperty.PropertyType);

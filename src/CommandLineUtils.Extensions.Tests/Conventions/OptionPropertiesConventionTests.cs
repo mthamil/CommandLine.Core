@@ -16,7 +16,7 @@ namespace CommandLineUtils.Extensions.Tests.Conventions
 
             _app.Option<string>("-n|--name", string.Empty, CommandOptionType.SingleValue);
             _app.Option<int>("-i|--id", string.Empty, CommandOptionType.SingleValue, true);
-            
+
             _app.Option<int?>("--int-value", string.Empty, CommandOptionType.SingleValue);
             _app.Option<string>("--string-value", string.Empty, CommandOptionType.SingleValue);
 
@@ -101,6 +101,21 @@ namespace CommandLineUtils.Extensions.Tests.Conventions
             Assert.Equal("value", _app.Model.MoreThings.StringValue);
         }
 
+        [Fact]
+        public void Test_NestedOptionsProperty_AlreadyInstantiated()
+        {
+            // Arrange.
+            _app.Conventions.UseOptionProperties();
+
+            // Act.
+            _app.Execute("--int-value", "2", "--string-value", "value");
+
+            // Assert.
+            Assert.NotNull(_app.Model.PreinstantiatedOptions);
+            Assert.Equal(2, _app.Model.PreinstantiatedOptions.IntValue);
+            Assert.Equal("value", _app.Model.PreinstantiatedOptions.StringValue);
+        }
+
         public class AppModel
         {
             public string Name { get; set; }
@@ -113,7 +128,9 @@ namespace CommandLineUtils.Extensions.Tests.Conventions
 
             public string DisplayName => $"{Name}:{Id}";
 
-            public InvalidNested SomeOptions { get; set; }
+            public NestedWithConstructor SomeOptions { get; set; }
+
+            public NestedWithConstructor PreinstantiatedOptions { get; set; } = new NestedWithConstructor(null, null);
 
             public Nested MoreOptions { get; set; }
 
@@ -144,9 +161,9 @@ namespace CommandLineUtils.Extensions.Tests.Conventions
             public string StringValue { get; set; }
         }
 
-        public class InvalidNested
+        public class NestedWithConstructor
         {
-            public InvalidNested(int? intValue, string stringValue)
+            public NestedWithConstructor(int? intValue, string stringValue)
             {
                 IntValue = intValue;
                 StringValue = stringValue;
