@@ -12,4 +12,4 @@ Install
 
 [![NuGet](https://img.shields.io/nuget/v/CommandLine.Core.CommandLineUtils.svg)](https://www.nuget.org/packages/CommandLine.Core.CommandLineUtils/)
 
-[![NuGet](https://img.shields.io/nuget/v/ommandLineUtils.Extensions.svg)](https://www.nuget.org/packages/CommandLineUtils.Extensions/)
+[![NuGet](https://img.shields.io/nuget/v/CommandLineUtils.Extensions.svg)](https://www.nuget.org/packages/CommandLineUtils.Extensions/)
