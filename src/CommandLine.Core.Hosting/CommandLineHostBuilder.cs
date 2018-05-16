@@ -10,13 +10,11 @@ namespace CommandLine.Core.Hosting
     {
         private readonly ICollection<Action<IServiceCollection>> _serviceConfigurations = new List<Action<IServiceCollection>>();
         private readonly IConfigurationRoot _config;
-        private readonly HostingEnvironment _hostingEnvironment;
         private readonly string[] _args;
         private bool _built;
 
         public CommandLineHostBuilder(string[] args)
         {
-            _hostingEnvironment = new HostingEnvironment();
             _config = new ConfigurationBuilder()
                 .AddEnvironmentVariables("COMMANDLINECORE_")
                 .Build();
@@ -45,11 +43,11 @@ namespace CommandLine.Core.Hosting
             if (_built)
                 throw new InvalidOperationException("Host has already been built.");
 
-            _hostingEnvironment.Initialize(_config);
+            var hostingEnvironment = new HostingEnvironment(_config);
 
             var services = new ServiceCollection()
                 .AddSingleton<IConfiguration>(_config)
-                .AddSingleton<IHostingEnvironment>(_hostingEnvironment);
+                .AddSingleton<IHostingEnvironment>(hostingEnvironment);
 
             foreach (var serviceConfig in _serviceConfigurations)
                 serviceConfig(services);

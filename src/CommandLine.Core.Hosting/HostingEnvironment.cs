@@ -7,7 +7,7 @@ namespace CommandLine.Core.Hosting
 {
     class HostingEnvironment : IHostingEnvironment
     {
-        public void Initialize(IConfiguration config)
+        public HostingEnvironment(IConfiguration config)
         {
             ApplicationName = config[HostDefaults.ApplicationNameKey];
             EnvironmentName = config[HostDefaults.EnvironmentNameKey] ?? EnvironmentName;
@@ -15,12 +15,12 @@ namespace CommandLine.Core.Hosting
             WorkingDirectoryFileProvider = new PhysicalFileProvider(WorkingDirectory);
         }
 
-        public string ApplicationName { get; private set; }
+        public string ApplicationName { get; }
 
-        public string EnvironmentName { get; private set; } = "Development";
+        public string EnvironmentName { get; } = "Development";
 
-        public string WorkingDirectory { get; private set; } = Directory.GetCurrentDirectory();
+        public string WorkingDirectory { get; } = Directory.GetCurrentDirectory();
 
-        public IFileProvider WorkingDirectoryFileProvider { get; private set; }
+        public IFileProvider WorkingDirectoryFileProvider { get; }
     }
 }
