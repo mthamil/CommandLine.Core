@@ -17,4 +17,15 @@ namespace CommandLine.Core.Hosting.Abstractions
         /// </summary>
         void Configure(IApplicationBuilder app);
     }
+
+    /// <summary>
+    /// Represents an application's entry point with service container customization.
+    /// </summary>
+    public interface IStartup<TContainerBuilder> : IStartup
+    {
+        /// <summary>
+        /// Configures an application's service container.
+        /// </summary>
+        void ConfigureContainer(TContainerBuilder builder);
+    }
 }

@@ -19,11 +19,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLineUtils.Extensions", "CommandLineUtils.Extensions\CommandLineUtils.Extensions.csproj", "{12F0AC59-64C5-4C14-AFB8-476E0D46F8FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLineUtils.Extensions", "CommandLineUtils.Extensions\CommandLineUtils.Extensions.csproj", "{12F0AC59-64C5-4C14-AFB8-476E0D46F8FE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommandLineUtils", "CommandLineUtils", "{CA713BCD-89ED-454F-A15C-34D1EFEE5D0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLineUtils.Extensions.Tests", "CommandLineUtils.Extensions.Tests\CommandLineUtils.Extensions.Tests.csproj", "{6FCD7010-5EAD-4017-AEB9-05D84BFEB20F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLineUtils.Extensions.Tests", "CommandLineUtils.Extensions.Tests\CommandLineUtils.Extensions.Tests.csproj", "{6FCD7010-5EAD-4017-AEB9-05D84BFEB20F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLine.Core.Tests", "CommandLine.Core.Tests\CommandLine.Core.Tests.csproj", "{687C2E23-FBE9-4AF3-87D0-A229FE9542D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,10 @@ Global
 		{6FCD7010-5EAD-4017-AEB9-05D84BFEB20F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FCD7010-5EAD-4017-AEB9-05D84BFEB20F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6FCD7010-5EAD-4017-AEB9-05D84BFEB20F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{687C2E23-FBE9-4AF3-87D0-A229FE9542D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{687C2E23-FBE9-4AF3-87D0-A229FE9542D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{687C2E23-FBE9-4AF3-87D0-A229FE9542D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{687C2E23-FBE9-4AF3-87D0-A229FE9542D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
 
 namespace CommandLine.Core.Hosting
 {
@@ -19,8 +20,45 @@ namespace CommandLine.Core.Hosting
                 throw new ArgumentNullException(nameof(configureApp));
 
             return builder.UseSetting(HostDefaults.ApplicationNameKey, configureApp.Method.DeclaringType.Assembly.GetName().Name)
-                          .ConfigureServices(services => services.AddSingleton<IStartup>(new DelegateStartup(configureApp)));
+                          .ConfigureServices(services =>
+                          {
+                              var startupDescriptor = services.SingleOrDefault(s => s.ImplementationType.IsDelegateStartupType());
+                              if (startupDescriptor != null)
+                                  services.Remove(startupDescriptor);
+
+                              services.AddSingleton<IStartup>(new DelegateStartup<IServiceCollection>
+                              {
+                                  ConfigureApp = configureApp
+                              });
+                          });
         }
+
+        /// <summary>
+        /// Adds a delegate that configures a custom service container.
+        /// </summary>
+        public static ICommandLineHostBuilder ConfigureContainer<TContainerBuilder>(this ICommandLineHostBuilder builder, Action<TContainerBuilder> configureContainer)
+        {
+            if (configureContainer == null)
+                throw new ArgumentNullException(nameof(configureContainer));
+
+            return builder.ConfigureServices(services =>
+            {
+                var startupDescriptor = services.SingleOrDefault(s => s.ImplementationType.IsDelegateStartupType());
+                if (startupDescriptor != null)
+                    services.Remove(startupDescriptor);
+
+                var startup = startupDescriptor?.ImplementationInstance as IStartup;
+                services.AddSingleton<IStartup>(new DelegateStartup<TContainerBuilder>
+                {
+                    ConfigureApp = b => startup?.Configure(b),
+                    ConfigureContainerBuilder = configureContainer
+                });
+            });
+        }
+
+        private static bool IsDelegateStartupType(this Type type) => type != null &&
+                                                                     type.IsGenericType &&
+                                                                     type.GetGenericTypeDefinition() == typeof(DelegateStartup<>);
 
         /// <summary>
         /// Adds a delegate that configures application logging.

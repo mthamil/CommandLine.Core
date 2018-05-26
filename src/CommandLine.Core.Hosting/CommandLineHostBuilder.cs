@@ -46,6 +46,8 @@ namespace CommandLine.Core.Hosting
             var hostingEnvironment = new HostingEnvironment(_config);
 
             var services = new ServiceCollection()
+                .AddSingleton<IServiceProviderFactory<IServiceCollection>, DefaultServiceProviderFactory>()
+                .AddSingleton<IServiceProviderFactory, ServiceProviderMetaFactory>()
                 .AddSingleton<IConfiguration>(_config)
                 .AddSingleton<IHostingEnvironment>(hostingEnvironment);
 

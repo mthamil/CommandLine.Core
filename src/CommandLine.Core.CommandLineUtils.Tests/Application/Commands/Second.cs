@@ -13,8 +13,8 @@ namespace CommandLine.Core.CommandLineUtils.Tests.Application.Commands
 
         public Second(IConsole console, IEnumerable<CommandOption> options)
         {
-            _console = console;
-            _options = options;
+            _console = console ?? throw new ArgumentNullException(nameof(console));
+            _options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
         public Task<int> OnExecuteAsync()

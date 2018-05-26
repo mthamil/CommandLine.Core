@@ -33,14 +33,12 @@ namespace CommandLine.Core.Hosting
 
             _startup = new Lazy<IStartup>(() => _hostingServiceProvider.GetRequiredService<IStartup>());
             _appServiceProvider = new Lazy<IServiceProvider>(() =>
-            {
-                _startup.Value.ConfigureServices(_appServices);
-                return _appServices.BuildServiceProvider();
-            });
+                _hostingServiceProvider.GetRequiredService<IServiceProviderFactory>()
+                                       .CreateServiceProvider(_appServices));
         }
 
         /// <summary>
-        /// The <see cref="IServiceProvider" /> for the application.
+        /// The <see cref="IServiceProvider"/> for the application.
         /// </summary>
         public IServiceProvider Services => _appServiceProvider.Value;
 
