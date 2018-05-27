@@ -4,14 +4,16 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CommandLine.Core.Hosting
 {
-    class DelegateStartup : IStartup
+    class DelegateStartup<TContainerBuilder> : IStartup<TContainerBuilder>
     {
-        private readonly Action<IApplicationBuilder> _configureApp;
+        internal Action<IApplicationBuilder> ConfigureApp { get; set; }
 
-        public DelegateStartup(Action<IApplicationBuilder> configureApp) => _configureApp = configureApp;
+        internal Action<TContainerBuilder> ConfigureContainerBuilder { get; set; }
 
         public void ConfigureServices(IServiceCollection services) { }
 
-        public void Configure(IApplicationBuilder app) => _configureApp(app);
+        public void ConfigureContainer(TContainerBuilder builder) => ConfigureContainerBuilder?.Invoke(builder);
+
+        public void Configure(IApplicationBuilder app) => ConfigureApp?.Invoke(app);
     }
 }

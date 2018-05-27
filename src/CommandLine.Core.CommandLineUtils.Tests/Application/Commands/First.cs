@@ -8,7 +8,7 @@ namespace CommandLine.Core.CommandLineUtils.Tests.Application.Commands
 
         public First(IConsole console)
         {
-            _console = console;
+            _console = console ?? throw new System.ArgumentNullException(nameof(console));
         }
 
         public Second Subcommand { get; set; }
