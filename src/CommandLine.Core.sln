@@ -15,6 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		..\.gitignore = ..\.gitignore
 		..\appveyor.yml = ..\appveyor.yml
+		..\CHANGELOG.md = ..\CHANGELOG.md
 		..\LICENSE = ..\LICENSE
 		..\README.md = ..\README.md
 	EndProjectSection
@@ -25,7 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommandLineUtils", "Command
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLineUtils.Extensions.Tests", "CommandLineUtils.Extensions.Tests\CommandLineUtils.Extensions.Tests.csproj", "{6FCD7010-5EAD-4017-AEB9-05D84BFEB20F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLine.Core.Tests", "CommandLine.Core.Tests\CommandLine.Core.Tests.csproj", "{687C2E23-FBE9-4AF3-87D0-A229FE9542D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLine.Core.Tests", "CommandLine.Core.Tests\CommandLine.Core.Tests.csproj", "{687C2E23-FBE9-4AF3-87D0-A229FE9542D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
