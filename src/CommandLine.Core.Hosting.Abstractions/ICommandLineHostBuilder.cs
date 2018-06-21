@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 
 namespace CommandLine.Core.Hosting.Abstractions
@@ -14,8 +15,12 @@ namespace CommandLine.Core.Hosting.Abstractions
         ICommandLineHostBuilder UseSetting(string key, string value);
 
         /// <summary>
-        /// Adds a function that configures services for the application.
-        /// It may be called multiple times.
+        /// Initializes the application's configuration. This may be called multiple times.
+        /// </summary>
+        ICommandLineHostBuilder ConfigureAppConfiguration(Action<IConfigurationBuilder> configureAppConfiguration);
+
+        /// <summary>
+        /// Configures services for the application. This may be called multiple times.
         /// </summary>
         ICommandLineHostBuilder ConfigureServices(Action<IServiceCollection> configureServices);
 

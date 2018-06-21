@@ -9,6 +9,7 @@ namespace CommandLine.Core.Hosting
     class CommandLineHostBuilder : ICommandLineHostBuilder
     {
         private readonly ICollection<Action<IServiceCollection>> _serviceConfigurations = new List<Action<IServiceCollection>>();
+        private readonly ICollection<Action<IConfigurationBuilder>> _appConfigurations = new List<Action<IConfigurationBuilder>>();
         private readonly IConfigurationRoot _config;
         private readonly string[] _args;
         private bool _built;
@@ -32,6 +33,12 @@ namespace CommandLine.Core.Hosting
             return this;
         }
 
+        public ICommandLineHostBuilder ConfigureAppConfiguration(Action<IConfigurationBuilder> configureAppConfiguration)
+        {
+            _appConfigurations.Add(configureAppConfiguration ?? throw new ArgumentNullException(nameof(configureAppConfiguration)));
+            return this;
+        }
+
         public ICommandLineHostBuilder ConfigureServices(Action<IServiceCollection> configureServices)
         {
             _serviceConfigurations.Add(configureServices ?? throw new ArgumentNullException(nameof(configureServices)));
@@ -45,10 +52,14 @@ namespace CommandLine.Core.Hosting
 
             var hostingEnvironment = new HostingEnvironment(_config);
 
+            var appConfig = new ConfigurationBuilder().AddConfiguration(_config);
+            foreach (var configuration in _appConfigurations)
+                configuration(appConfig);
+
             var services = new ServiceCollection()
                 .AddSingleton<IServiceProviderFactory<IServiceCollection>, DefaultServiceProviderFactory>()
                 .AddSingleton<IServiceProviderFactory, ServiceProviderMetaFactory>()
-                .AddSingleton<IConfiguration>(_config)
+                .AddSingleton<IConfiguration>(appConfig.Build())
                 .AddSingleton<IHostingEnvironment>(hostingEnvironment);
 
             foreach (var serviceConfig in _serviceConfigurations)
