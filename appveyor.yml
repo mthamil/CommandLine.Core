@@ -46,7 +46,7 @@ nuget:
 #---------------------------------#
 
 test_script:
-  - ps: Get-ChildItem *.Tests | % { cd $_; dotnet xunit --configuration $Env:CONFIGURATION --fx-version 2.1.0 --no-build; cd ..; }
+  - ps: Get-ChildItem *.Tests | % { cd $_; dotnet xunit --configuration $Env:CONFIGURATION --no-build; cd ..; }
 
 
 #---------------------------------#
