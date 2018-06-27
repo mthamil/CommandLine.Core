@@ -1,7 +1,7 @@
 # Changelog
 
 
-## v1.1.0 (Unreleased)
+## v1.1.0
 
  - Added third party dependency injection framework integration.
  - Added host builder method for configuring the application config.
