@@ -74,7 +74,7 @@ namespace CommandLine.Core.Hosting
         /// <summary>
         /// Specifies the startup class to use to configure an application.
         /// </summary>
-        public static ICommandLineHostBuilder UseStartup<TStartup>(this ICommandLineHostBuilder builder) where TStartup : class, IStartup, new()
+        public static ICommandLineHostBuilder UseStartup<TStartup>(this ICommandLineHostBuilder builder) where TStartup : class, IStartup
         {
             return builder.UseSetting(HostDefaults.ApplicationNameKey, typeof(TStartup).Assembly.GetName().Name)
                           .ConfigureServices(services => services.AddSingleton<IStartup, TStartup>());
